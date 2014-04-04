@@ -12,6 +12,7 @@ import edu.morgan.studentUser.Records;
 import edu.morgan.studentUser.Row;
 import edu.morgan.studentUser.User;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class IncompleteStudents {
     }
 
     public void utility() throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("/Users/user/Desktop/BAFASE_min-2.json"));
+        BufferedReader reader = new BufferedReader(new FileReader("/Users/pablohpsilva/Downloads/BAFASE_min.json"));
         String line = "";
         String json = "";
         while ((line = reader.readLine()) != null) {
@@ -104,7 +105,7 @@ public class IncompleteStudents {
         String json = this.gson.toJson(user);
         try {
 		//write converted json data to a file named "file.json"
-		FileWriter writer = new FileWriter("/Users/user/Desktop/"+ name +".json");
+		FileWriter writer = new FileWriter("/Users/pablohpsilva/Desktop/BAFASE_new_min.json");
 		writer.write(json);
 		writer.close();
  

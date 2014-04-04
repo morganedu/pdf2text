@@ -5,11 +5,8 @@ import edu.morgan.users.IncompleteStudent;
 import edu.morgan.users.IncompleteStudents;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -43,6 +40,7 @@ public class Main {
         arrayPdf.addAll(Arrays.asList(folder.listFiles()));
         
         try {
+            incompletestudents.utility();
             studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
             //Get all the students from JSON file
             incompletestudents.utility(JSONPathMin);
@@ -83,13 +81,54 @@ public class Main {
 
                         // Find for checklist item title
                         for(String checklistItem : formattedChecklist){
-                            StringTokenizer st = new StringTokenizer(checklistItem);
-                            while(st.hasMoreTokens())
-                                if ((mat.find() || matcher.find()) && theString.toLowerCase().contains(st.nextToken().toLowerCase())) {
+                            /*
+                             * READ ME!
+                             * Algorithm below is the precisest one.
+                             * Some results are not found. 
+                             *
+                             */
+                            /*
+                            int count = 0;
+                            String[] tokenList = checklistItem.replaceAll("-", " ").split(" ");
+                            for(String token : tokenList)
+                                if (mat.find() || matcher.find())
+                                    if(theString.toLowerCase().contains(token.toLowerCase()))
+                                        count+=1;
+                            if(count == tokenList.length){
+                                exec.copyFile(file, studentFolder, fileName);
+                                student.setChecklist(student.getChecklist().replace(checklistItem+"::", ""));
+                                System.out.println(studentFolderPath+fileName);
+                            }
+                            */
+                            
+                            /*
+                             * READ ME!
+                             * Algorithm below is the second best.
+                             * 
+                             */
+                            /*
+                            if ((mat.find() || matcher.find()) && theString.toLowerCase().contains(checklistItem.toLowerCase())){
+                                exec.copyFile(file, studentFolder, fileName);
+                                student.setChecklist(student.getChecklist().replace(checklistItem+"::", ""));
+                                System.out.println(studentFolderPath+fileName);
+                            }
+                            */
+                            
+                            /*
+                             * READ ME!
+                             * Algorithm below is the best one.
+                             * 
+                             */
+                            ///*
+                            String[] tokenList = checklistItem.replaceAll("-", " ").split(" ");
+                            for(String token : tokenList)
+                                if ((mat.find() || matcher.find()) && theString.toLowerCase().contains(token.toLowerCase())){
                                     exec.copyFile(file, studentFolder, fileName);
-                                    student.setChecklist(student.getChecklist().replace(checklistItem+"::", ""));
+                                    student.setChecklist(student.getChecklist().replace(checklistItem, ""));
+                                    student.setChecklist(student.getChecklist().replace("::", ""));
                                     System.out.println(studentFolderPath+fileName);
                                 }
+                            //*/
                         }
                     }
                 }
@@ -98,7 +137,7 @@ public class Main {
             }
             
             // Generate new JSONFile
-            incompletestudents.generateJSON(incompletestudents.convertToUsers(studentsProcessed),"BAFASE_COMPLETE.json");
+            incompletestudents.generateJSON(incompletestudents.convertToUsers(studentsProcessed),"BAFASE_new_min");
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
