@@ -24,20 +24,20 @@ public class Execute {
     }
     
     public String[] getChecklist(String stringList){
-        String aux = stringList.toLowerCase();
+        String aux = stringList;
         aux = aux.replace("personal essay", "essay");
-        aux = aux.replace("sat or", "sat\\u000b");
+        aux = aux.replace("sat or", "sat::");
         aux = aux.replace("act scores", "act");
-        aux = aux.replace("secondary school cert", "waec\\u000bssce\\u000bsce\\u000bexc\\u000bgde");
-        aux = aux.replace("copy of birth certificate.*\\u000b","birth certificate");
-        aux = aux.replace("oficial exam waec/sce/cxc/gde", "waec\\u000bssce\\u000bsce\\u000bexc\\u000bgde");
-        aux = aux.replace("dd 214 form.*\\u000b","dd 214");
+        aux = aux.replace("secondary school cert", "waec::bssce::sce::exc::gde");
+        aux = aux.replace("copy of birth certificate.*::","birth certificate");
+        aux = aux.replace("oficial exam waec/sce/cxc/gde", "waec::ssce::sce::exc::gde");
+        aux = aux.replace("dd 214 form.*::","dd 214");
         aux = aux.replace("unknown high school","");
-        aux = aux.replace("proof of citizenship.*\\u000b", "");
-        aux = aux.replace("needs.*\\u000b", "");
-        aux = aux.replace("\\u000b.*residence card.*\\u000b", "\\u000bresidence card\\u000b");
-        aux = aux.replace("$35 application fee.*\\u000b", "");
-        return aux.split("\\u000b");
+        aux = aux.replace("proof of citizenship.*::", "");
+        aux = aux.replace("needs.*::", "");
+        aux = aux.replace("::.*residence card.*::", "::residence card::");
+        aux = aux.replace("$35 application fee.*::", "");
+        return aux.split("::");
     }
     
     public void copyFile(File sourceFile, File destFile, String fileName) throws IOException {

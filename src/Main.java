@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -31,6 +32,7 @@ public class Main {
         final String JSONPath = "/Users/pablohpsilva/Downloads/"+JSONTYPE;
         final String JSONPathMin = "/Users/pablohpsilva/Downloads/"+JSONTYPEMIN;
         final String PDFFolder = "/Users/pablohpsilva/Desktop/PDFFolder";
+        ArrayList<IncompleteStudent> studentsProcessed = new ArrayList<>();
         
         Execute exec = new Execute();
         IncompleteStudents incompletestudents = new IncompleteStudents();
@@ -41,10 +43,12 @@ public class Main {
         arrayPdf.addAll(Arrays.asList(folder.listFiles()));
         
         try {
+            studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
             //Get all the students from JSON file
             incompletestudents.utility(JSONPathMin);
+            //studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
             
-            for(IncompleteStudent student : incompletestudents.getStudents()){
+            for(IncompleteStudent student : studentsProcessed){
                 
                 //Create Patterns based on LastName.*FirstName and FirstName.*LastName
                 Pattern patternLastFirstName = exec.getPatternNames(student.getLastName(),student.getFirstName());
@@ -58,6 +62,7 @@ public class Main {
                     studentFolderPath += "_ATO/";
                 
                 if(!student.getChecklist().equals("")){
+                    student.setChecklist(student.getChecklist().replaceAll("\\u000b", "::").toLowerCase());
                     String[] formattedChecklist = exec.getChecklist(student.getChecklist());
                     
                     for(File file : arrayPdf){
@@ -78,16 +83,22 @@ public class Main {
 
                         // Find for checklist item title
                         for(String checklistItem : formattedChecklist){
-                            if ((mat.find() || matcher.find()) && theString.toLowerCase().contains(checklistItem.toLowerCase())) {
-                                //System.out.println(matcher.group() + "\t document probably is: " + checklistItem);
-                                exec.copyFile(file, studentFolder, fileName);
-                                System.out.println(studentFolderPath+fileName);
-                            }
+                            StringTokenizer st = new StringTokenizer(checklistItem);
+                            while(st.hasMoreTokens())
+                                if ((mat.find() || matcher.find()) && theString.toLowerCase().contains(st.nextToken().toLowerCase())) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem+"::", ""));
+                                    System.out.println(studentFolderPath+fileName);
+                                }
                         }
                     }
                 }
+                if(student.getChecklist().equals(""))
+                    student.setChecklist("COMPLETE");
             }
-
+            
+            // Generate new JSONFile
+            incompletestudents.generateJSON(incompletestudents.convertToUsers(studentsProcessed),"BAFASE_COMPLETE.json");
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
