@@ -59,6 +59,10 @@ public class Main {
                 else
                     studentFolderPath += "_ATO/";
                 
+                File studentFolder = new File(studentFolderPath);
+                if(!studentFolder.exists())
+                    studentFolder.mkdir();
+                
                 if(!student.getChecklist().equals("")){
                     student.setChecklist(student.getChecklist().replaceAll("\\u000b", "::").toLowerCase());
                     String[] formattedChecklist = exec.getChecklist(student.getChecklist());
@@ -67,7 +71,6 @@ public class Main {
                         //Get StudentFolder
                         String[] fileNameAux = file.getPath().split("/");
                         String fileName = fileNameAux[fileNameAux.length-1];
-                        File studentFolder = new File(studentFolderPath);
                         
                         //Get the PDF file and convert it to StringBuffer
                         StringBuffer str = new Main().getPDFText(file);
