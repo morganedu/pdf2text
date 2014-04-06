@@ -101,12 +101,12 @@ public class Main {
                             checklistItem = checklistItem.toLowerCase();
                             
                             if(checklistItem.contains("scores") && checklistItem.contains("sat") || checklistItem.contains("act")){
-                                if ((mat.find() || matcher.find()) && (theString.contains("scores") && theString.contains("sat") || checklistItem.contains("act")))
+                                if ((mat.find() || matcher.find()) && (theString.contains("scores") && (theString.contains("sat") || checklistItem.contains("act"))))
                                     exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                             }
                             
                             else if (checklistItem.contains("recommendation") && checklistItem.contains("counselor") || checklistItem.contains("teacher")) {
-                                if ((mat.find() || matcher.find()) && (theString.contains("recommendation") && theString.contains("counselor") || theString.contains("teacher")))
+                                if ((mat.find() || matcher.find()) && (theString.contains("recommendation") && (theString.contains("counselor") || theString.contains("teacher"))))
                                     exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                             }
                             
@@ -130,7 +130,7 @@ public class Main {
                             } 
                             
                             else if (checklistItem.contains("official") && checklistItem.contains("exam")) {
-                                if ((mat.find() || matcher.find()) && (theString.contains("sssce") || theString.contains("waec") || theString.contains("cxc") || theString.contains("gde")))
+                                if ((mat.find() || matcher.find()) && (theString.contains("sssce") || theString.contains("sce") || theString.contains("waec") || theString.contains("cxc") || theString.contains("gde")))
                                     exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                             }
                             
