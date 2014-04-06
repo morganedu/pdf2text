@@ -21,58 +21,64 @@ import java.util.regex.Pattern;
  *
  * @author user
  */
-public class Main {        
+public class Main {
+
+    @SuppressWarnings("empty-statement")
     public static void main(String args[]) {
         final String JSONTYPE = "BAFASE.json";
-        final String JSONTYPEMIN = "BAFASE_min.json";
-        final String OUTPUTPATH = "/Users/pablohpsilva/Desktop/Output/";
-        final String JSONPath = "/Users/pablohpsilva/Downloads/"+JSONTYPE;
-        final String JSONPathMin = "/Users/pablohpsilva/Downloads/"+JSONTYPEMIN;
-        final String PDFFolder = "/Users/pablohpsilva/Desktop/PDFFolder";
+        final String OUTPUTPATH = "/Users/user/Desktop/Output/";
+        final String JSONPath = "/Users/user/Desktop/" + JSONTYPE;
+        final String PDFFolder = "/Users/user/Desktop/S";
         ArrayList<IncompleteStudent> studentsProcessed = new ArrayList<>();
-        
+
         Execute exec = new Execute();
         IncompleteStudents incompletestudents = new IncompleteStudents();
         ArrayList<File> arrayPdf = new ArrayList<>();
         File folder = new File(PDFFolder);
-        
+
         //Get all PDFs from a folder
         arrayPdf.addAll(Arrays.asList(folder.listFiles()));
-        
+
         try {
             incompletestudents.utility();
             studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
             //Get all the students from JSON file
-            incompletestudents.utility(JSONPathMin);
+            incompletestudents.utility(JSONPath);
             //studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
-            
-            for(IncompleteStudent student : studentsProcessed){
-                
+
+            for (IncompleteStudent student : studentsProcessed) {
+
                 //Create Patterns based on LastName.*FirstName and FirstName.*LastName
-                Pattern patternLastFirstName = exec.getPatternNames(student.getLastName(),student.getFirstName());
-                Pattern patternFirstLastName = exec.getPatternNames(student.getFirstName(),student.getLastName());
-                
+                Pattern patternLastFirstName = exec.getPatternNames(student.getLastName(), student.getFirstName());
+                Pattern patternFirstLastName = exec.getPatternNames(student.getFirstName(), student.getLastName());
+
                 // Create folder path
                 String studentFolderPath = OUTPUTPATH + student.getLastName() + "_" + student.getFirstName() + "_";
-                if(!student.getId().equals(""))
+                if (!student.getId().equals("")) {
                     studentFolderPath += student.getId() + "_ATO/";
-                else
+                } else {
                     studentFolderPath += "_ATO/";
-                
+                }
+
                 File studentFolder = new File(studentFolderPath);
-                if(!studentFolder.exists())
+                if (!studentFolder.exists()) {
                     studentFolder.mkdir();
-                
-                if(!student.getChecklist().equals("")){
+                }
+
+                if (!student.getChecklist().equals("")) {
                     student.setChecklist(student.getChecklist().replaceAll("\\u000b", "::").toLowerCase());
-                    String[] formattedChecklist = exec.getChecklist(student.getChecklist());
-                    
-                    for(File file : arrayPdf){
+                    String checklist[] = student.getChecklist().split("::");
+
+                    for (File file : arrayPdf) {
                         //Get StudentFolder
                         String[] fileNameAux = file.getPath().split("/");
-                        String fileName = fileNameAux[fileNameAux.length-1];
-                        
+                        String fileName = fileNameAux[fileNameAux.length - 1];
+
                         //Get the PDF file and convert it to StringBuffer
+                        if (!file.getName().contains("pdf")) {
+                            continue;
+                        }
+                        //System.out.print("Hello, I got here");
                         StringBuffer str = new Main().getPDFText(file);
 
                         // Convert StringBuffer to String
@@ -83,64 +89,121 @@ public class Main {
                         Matcher mat = patternFirstLastName.matcher(theString);
 
                         // Find for checklist item title
-                        for(String checklistItem : formattedChecklist){
-                            /*
-                             * READ ME!
-                             * Algorithm below is the precisest one.
-                             * Some results are not found. 
-                             *
-                             */
-                            /*
-                            int count = 0;
-                            String[] tokenList = checklistItem.replaceAll("-", " ").split(" ");
-                            for(String token : tokenList)
-                                if (mat.find() || matcher.find())
-                                    if(theString.toLowerCase().contains(token.toLowerCase()))
-                                        count+=1;
-                            if(count == tokenList.length){
-                                exec.copyFile(file, studentFolder, fileName);
-                                student.setChecklist(student.getChecklist().replace(checklistItem+"::", ""));
-                                System.out.println(studentFolderPath+fileName);
-                            }
-                            */
-                            
-                            /*
-                             * READ ME!
-                             * Algorithm below is the second best.
-                             * 
-                             */
-                            /*
-                            if ((mat.find() || matcher.find()) && theString.toLowerCase().contains(checklistItem.toLowerCase())){
-                                exec.copyFile(file, studentFolder, fileName);
-                                student.setChecklist(student.getChecklist().replace(checklistItem+"::", ""));
-                                System.out.println(studentFolderPath+fileName);
-                            }
-                            */
-                            
-                            /*
-                             * READ ME!
-                             * Algorithm below is the best one.
-                             * 
-                             */
-                            ///*
-                            String[] tokenList = checklistItem.replaceAll("-", " ").split(" ");
-                            for(String token : tokenList)
-                                if ((mat.find() || matcher.find()) && theString.toLowerCase().contains(token.toLowerCase())){
+                        for (String checklistItem : checklist) {
+                            if (checklistItem.toLowerCase().contains("sat") && checklistItem.toLowerCase().contains("scores")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("sat") && theString.toLowerCase().contains("scores"))) {
                                     exec.copyFile(file, studentFolder, fileName);
-                                    student.setChecklist(student.getChecklist().replace(checklistItem, ""));
-                                    student.setChecklist(student.getChecklist().replace("::", ""));
-                                    System.out.println(studentFolderPath+fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
                                 }
-                            //*/
-                        }
+                            } else if (checklistItem.toLowerCase().contains("act") && checklistItem.toLowerCase().contains("scores")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("sat") && theString.toLowerCase().contains("scores"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("counselor") && checklistItem.toLowerCase().contains("recommendation")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("counselor") && theString.toLowerCase().contains("recommendation"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("essay") && checklistItem.toLowerCase().contains("personal")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("essay") && theString.toLowerCase().contains("personal"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("teacher") && (checklistItem.toLowerCase().contains("recommendation"))) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("teacher") && theString.toLowerCase().contains("recommendation"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("high") && checklistItem.toLowerCase().contains("school") && checklistItem.toLowerCase().contains("trancript")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("high") && theString.toLowerCase().contains("school") && theString.toLowerCase().contains("trancript"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("secondary") && checklistItem.toLowerCase().contains("school") && checklistItem.toLowerCase().contains("certificate")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("secondary") && theString.toLowerCase().contains("school") && theString.toLowerCase().contains("certificate"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("birth") && checklistItem.toLowerCase().contains("certificate")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("birth") && theString.toLowerCase().contains("certificate"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("official") && checklistItem.toLowerCase().contains("exam")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("sssce") || theString.toLowerCase().contains("waec") || theString.toLowerCase().contains("cxc") || theString.toLowerCase().contains("gde"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("214") && checklistItem.toLowerCase().contains("form")) {
+                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("214") && theString.toLowerCase().contains("form"))) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            } else if (checklistItem.toLowerCase().contains("resident") && checklistItem.toLowerCase().contains("card")) {
+                                if ((mat.find() || matcher.find()) && theString.toLowerCase().contains("resident") && theString.toLowerCase().contains("card")) {
+                                    exec.copyFile(file, studentFolder, fileName);
+                                    student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
+                                    System.out.println(studentFolderPath + fileName);
+                                }
+                            }
+                        } /*
+                         * READ ME!
+                         * Algorithm below is the precisest one.
+                         * Some results are not found. 
+                         *
+                         */ /*
+                         int count = 0;
+                         String[] tokenList = checklistItem.replaceAll("-", " ").split(" ");
+                         for(String token : tokenList)
+                         if (mat.find() || matcher.find())
+                         if(theString.toLowerCase().contains(token.toLowerCase()))
+                         count+=1;
+                         if(count == tokenList.length){
+                         exec.copyFile(file, studentFolder, fileName);
+                         student.setChecklist(student.getChecklist().replace(checklistItem+"::", ""));
+                         System.out.println(studentFolderPath+fileName);
+                         }
+                         */ /*
+                         * READ ME!
+                         * Algorithm below is the second best.
+                         * 
+                         */ /*
+                         if ((mat.find() || matcher.find()) && theString.toLowerCase().contains(checklistItem.toLowerCase())){
+                         exec.copyFile(file, studentFolder, fileName);
+                         student.setChecklist(student.getChecklist().replace(checklistItem+"::", ""));
+                         System.out.println(studentFolderPath+fileName);
+                         }
+                         */ /*
+                         * READ ME!
+                         * Algorithm below is the best one.
+                         * 
+                         */ ///*
+
+
+
+
+
                     }
                 }
-                if(student.getChecklist().equals(""))
+
+                if (student.getChecklist().equals("")) {
                     student.setChecklist("COMPLETE");
+                }
             }
-            
+
             // Generate new JSONFile
-            incompletestudents.generateJSON(incompletestudents.convertToUsers(studentsProcessed),"BAFASE_new_min");
+            incompletestudents.generateJSON(incompletestudents.convertToUsers(studentsProcessed), "BAFASE_new_min");
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

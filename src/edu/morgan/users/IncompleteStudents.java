@@ -38,7 +38,7 @@ public class IncompleteStudents {
     }
 
     public void utility() throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("/Users/pablohpsilva/Downloads/BAFASE_min.json"));
+        BufferedReader reader = new BufferedReader(new FileReader("/Users/user/Desktop/BAFASE.json"));
         String line = "";
         String json = "";
         while ((line = reader.readLine()) != null) {
@@ -105,7 +105,7 @@ public class IncompleteStudents {
         String json = this.gson.toJson(user);
         try {
 		//write converted json data to a file named "file.json"
-		FileWriter writer = new FileWriter("/Users/pablohpsilva/Desktop/BAFASE_new_min.json");
+		FileWriter writer = new FileWriter("/Users/Desktop/Desktop/BAFASE_new_min.json");
 		writer.write(json);
 		writer.close();
  
