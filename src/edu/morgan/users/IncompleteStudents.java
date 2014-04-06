@@ -28,6 +28,11 @@ public class IncompleteStudents {
     private Gson gson = new GsonBuilder().create();
     private String jsonObj = "";
     private ArrayList<IncompleteStudent> students = new ArrayList<>();
+    
+    //private String JSONFILEINPUT = "/Users/user/Desktop/BAFASE.json";
+    private final String JSONFILEINPUT = "/Users/pablohpsilva/Downloads/BAFASE_min.json";
+    
+    private final String JSONFILEOUTPUT = "/Users/pablohpsilva/Desktop/BAFASE_new_min.json";
 
     public ArrayList<IncompleteStudent> getStudents() {
         return students;
@@ -38,7 +43,7 @@ public class IncompleteStudents {
     }
 
     public void utility() throws Exception {
-        BufferedReader reader = new BufferedReader(new FileReader("/Users/user/Desktop/BAFASE.json"));
+        BufferedReader reader = new BufferedReader(new FileReader(JSONFILEINPUT));
         String line = "";
         String json = "";
         while ((line = reader.readLine()) != null) {
@@ -105,7 +110,7 @@ public class IncompleteStudents {
         String json = this.gson.toJson(user);
         try {
 		//write converted json data to a file named "file.json"
-		FileWriter writer = new FileWriter("/Users/Desktop/Desktop/BAFASE_new_min.json");
+		FileWriter writer = new FileWriter(JSONFILEOUTPUT);
 		writer.write(json);
 		writer.close();
  

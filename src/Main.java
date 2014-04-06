@@ -25,10 +25,17 @@ public class Main {
 
     @SuppressWarnings("empty-statement")
     public static void main(String args[]) {
+        /*
         final String JSONTYPE = "BAFASE.json";
         final String OUTPUTPATH = "/Users/user/Desktop/Output/";
         final String JSONPath = "/Users/user/Desktop/" + JSONTYPE;
         final String PDFFolder = "/Users/user/Desktop/S";
+        */
+        
+        final String JSONTYPE = "BAFASE_min.json";
+        final String OUTPUTPATH = "/Users/pablohpsilva/Desktop/Output/";
+        final String JSONPath = "/Users/pablohpsilva/Downloads/" + JSONTYPE;
+        final String PDFFolder = "/Users/pablohpsilva/Desktop/PDFFolder";
         ArrayList<IncompleteStudent> studentsProcessed = new ArrayList<>();
 
         Execute exec = new Execute();
@@ -90,68 +97,71 @@ public class Main {
 
                         // Find for checklist item title
                         for (String checklistItem : checklist) {
-                            if (checklistItem.toLowerCase().contains("sat") && checklistItem.toLowerCase().contains("scores")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("sat") && theString.toLowerCase().contains("scores"))) {
+                            theString = theString.toLowerCase().trim().replaceAll("\\s+", " ");
+                            checklistItem = checklistItem.toLowerCase();
+                            
+                            if (checklistItem.contains("sat") && checklistItem.contains("scores")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("sat") && theString.contains("scores"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("act") && checklistItem.toLowerCase().contains("scores")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("sat") && theString.toLowerCase().contains("scores"))) {
+                            } else if (checklistItem.contains("act") && checklistItem.contains("scores")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("sat") && theString.contains("scores"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("counselor") && checklistItem.toLowerCase().contains("recommendation")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("counselor") && theString.toLowerCase().contains("recommendation"))) {
+                            } else if (checklistItem.contains("counselor") && checklistItem.contains("recommendation")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("counselor") && theString.contains("recommendation"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("essay") && checklistItem.toLowerCase().contains("personal")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("essay") && theString.toLowerCase().contains("personal"))) {
+                            } else if (checklistItem.contains("essay") && checklistItem.contains("personal")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("essay") && theString.contains("personal"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("teacher") && (checklistItem.toLowerCase().contains("recommendation"))) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("teacher") && theString.toLowerCase().contains("recommendation"))) {
+                            } else if (checklistItem.contains("teacher") && (checklistItem.contains("recommendation"))) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("teacher") && theString.contains("recommendation"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("high") && checklistItem.toLowerCase().contains("school") && checklistItem.toLowerCase().contains("trancript")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("high") && theString.toLowerCase().contains("school") && theString.toLowerCase().contains("trancript"))) {
+                            } else if (checklistItem.contains("high") && checklistItem.contains("school") && checklistItem.contains("transcript")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("high") && theString.contains("school") && theString.contains("trancript"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("secondary") && checklistItem.toLowerCase().contains("school") && checklistItem.toLowerCase().contains("certificate")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("secondary") && theString.toLowerCase().contains("school") && theString.toLowerCase().contains("certificate"))) {
+                            } else if (checklistItem.contains("secondary") && checklistItem.contains("school") && checklistItem.contains("certificate")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("secondary") && theString.contains("school") && theString.contains("certificate"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("birth") && checklistItem.toLowerCase().contains("certificate")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("birth") && theString.toLowerCase().contains("certificate"))) {
+                            } else if (checklistItem.contains("birth") && checklistItem.contains("certificate")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("birth") && theString.contains("certificate"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("official") && checklistItem.toLowerCase().contains("exam")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("sssce") || theString.toLowerCase().contains("waec") || theString.toLowerCase().contains("cxc") || theString.toLowerCase().contains("gde"))) {
+                            } else if (checklistItem.contains("official") && checklistItem.contains("exam")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("sssce") || theString.contains("waec") || theString.contains("cxc") || theString.contains("gde"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("214") && checklistItem.toLowerCase().contains("form")) {
-                                if ((mat.find() || matcher.find()) && (theString.toLowerCase().contains("214") && theString.toLowerCase().contains("form"))) {
+                            } else if (checklistItem.contains("214") && checklistItem.contains("form")) {
+                                if ((mat.find() || matcher.find()) && (theString.contains("214") && theString.contains("form"))) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
                                 }
-                            } else if (checklistItem.toLowerCase().contains("resident") && checklistItem.toLowerCase().contains("card")) {
-                                if ((mat.find() || matcher.find()) && theString.toLowerCase().contains("resident") && theString.toLowerCase().contains("card")) {
+                            } else if (checklistItem.contains("resident") && checklistItem.contains("card")) {
+                                if ((mat.find() || matcher.find()) && theString.contains("resident") && theString.contains("card")) {
                                     exec.copyFile(file, studentFolder, fileName);
                                     student.setChecklist(student.getChecklist().replace(checklistItem + "::", ""));
                                     System.out.println(studentFolderPath + fileName);
