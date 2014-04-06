@@ -1,4 +1,5 @@
 
+import edu.morgan.users.IncompleteStudent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -65,5 +66,16 @@ public class Execute {
 		destination.close();
 	}
 
-}
+    }
+    
+    public void copyFileAndChangeChecklist(File file, File studentFolder, String studentFolderPath, String fileName, String checklistItem, IncompleteStudent student) throws IOException{
+        this.copyFile(file, studentFolder, fileName);
+        String aux = student.getChecklist();
+        String aux2 = student.getChecklist().replace(checklistItem + "::", "");
+        if(aux.equals(aux2))
+            student.setChecklist(student.getChecklist().replace(checklistItem, ""));
+        else
+            student.setChecklist(aux2);
+        System.out.println(studentFolderPath + fileName);
+    }
 }
