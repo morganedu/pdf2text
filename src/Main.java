@@ -32,25 +32,52 @@ public class Main {
         final String PDFFolder = "/Users/user/Desktop/S";
         */
         
-        final String JSONTYPE = "BAFASE_min.json";
+        final String JSONTYPE = "BAFASE.json";
         final String OUTPUTPATH = "/Users/pablohpsilva/Desktop/Output/";
         final String JSONPath = "/Users/pablohpsilva/Downloads/" + JSONTYPE;
         final String PDFFolder = "/Users/pablohpsilva/Desktop/PDFFolder";
+        
         ArrayList<IncompleteStudent> studentsProcessed = new ArrayList<>();
 
         Execute exec = new Execute();
         IncompleteStudents incompletestudents = new IncompleteStudents();
         ArrayList<File> arrayPdf = new ArrayList<>();
+        //ArrayList<File> aux = new ArrayList<>();
         File folder = new File(PDFFolder);
 
         //Get all PDFs from a folder
         arrayPdf.addAll(Arrays.asList(folder.listFiles()));
+        //aux = (ArrayList<File>) arrayPdf.clone();
 
         try {
+            /*
+            int count = 0;
+            for(File file : arrayPdf){
+                //Get StudentFolder
+                String[] fileNameAux = file.getPath().split("/");
+                String fileName = fileNameAux[fileNameAux.length - 1];
+                count++;
+                System.out.println("Debug purposes: " + fileName + " " + count);
+
+                //Get the PDF file and convert it to StringBuffer
+                if (!file.getName().contains("pdf")) {
+                    continue;
+                }
+                //System.out.print("Hello, I got here");
+                StringBuffer str = new Main().getPDFText(file);
+
+                // Convert StringBuffer to String
+                String theString = str.toString();
+                theString = theString.toLowerCase().trim().replaceAll("\\s+", " ");
+                File output = new File(OUTPUTPATH);
+                if(!theString.equals(""))
+                    exec.copyFile(file, output, file.getName());
+            }
+            */
             incompletestudents.utility();
             studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
             //Get all the students from JSON file
-            incompletestudents.utility(JSONPath);
+            //incompletestudents.utility(JSONPath);
             //studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
 
             for (IncompleteStudent student : studentsProcessed) {
@@ -68,18 +95,23 @@ public class Main {
                 }
 
                 File studentFolder = new File(studentFolderPath);
+                /*
                 if (!studentFolder.exists()) {
                     studentFolder.mkdir();
                 }
+                */
 
                 if (!student.getChecklist().equals("")) {
                     student.setChecklist(student.getChecklist().replaceAll("\\u000b", "::").toLowerCase());
                     String checklist[] = student.getChecklist().split("::");
-
+                    
+                    int counter = 0;
                     for (File file : arrayPdf) {
                         //Get StudentFolder
                         String[] fileNameAux = file.getPath().split("/");
                         String fileName = fileNameAux[fileNameAux.length - 1];
+                        counter++;
+                        System.out.println("Debug purposes: " + fileName + " " + counter);
 
                         //Get the PDF file and convert it to StringBuffer
                         if (!file.getName().contains("pdf")) {
@@ -181,6 +213,7 @@ public class Main {
 
 
                     }
+                    Thread.sleep(2000);
                 }
 
                 if (student.getChecklist().equals("")) {

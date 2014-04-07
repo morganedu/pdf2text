@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class Execute {
     
     public Pattern getPatternNames(String lastName, String firstName){
-        return Pattern.compile(lastName+".*"+firstName, Pattern.CASE_INSENSITIVE);
+        return Pattern.compile("\\b"+lastName+".*"+firstName+"\\b", Pattern.CASE_INSENSITIVE);
     }
     
     /*public String[] getChecklist(String stringList){
@@ -69,6 +69,9 @@ public class Execute {
     }
     
     public void copyFileAndChangeChecklist(File file, File studentFolder, String studentFolderPath, String fileName, String checklistItem, IncompleteStudent student) throws IOException{
+        if (!studentFolder.exists()) {
+            studentFolder.mkdir();
+        }
         this.copyFile(file, studentFolder, fileName);
         String aux = student.getChecklist();
         String aux2 = student.getChecklist().replace(checklistItem + "::", "");
@@ -76,6 +79,6 @@ public class Execute {
             student.setChecklist(student.getChecklist().replace(checklistItem, ""));
         else
             student.setChecklist(aux2);
-        System.out.println(studentFolderPath + fileName);
+        System.out.println("\t\t" + studentFolderPath + fileName);
     }
 }

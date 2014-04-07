@@ -30,7 +30,7 @@ public class IncompleteStudents {
     private ArrayList<IncompleteStudent> students = new ArrayList<>();
     
     //private String JSONFILEINPUT = "/Users/user/Desktop/BAFASE.json";
-    private final String JSONFILEINPUT = "/Users/pablohpsilva/Downloads/BAFASE_min.json";
+    private final String JSONFILEINPUT = "/Users/pablohpsilva/Downloads/BAFASE.json";
     
     private final String JSONFILEOUTPUT = "/Users/pablohpsilva/Desktop/BAFASE_new_min.json";
 
