@@ -67,7 +67,7 @@ public class Row {
     }
 
     public void setA(String a) {
-        this.a = a;
+        this.a = a.replaceAll("\\u000b", "::").toLowerCase();
     }
 
     public String getB() {
