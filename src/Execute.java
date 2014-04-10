@@ -68,7 +68,7 @@ public class Execute {
 
     }
     
-    public void copyFileAndChangeChecklist(File file, File studentFolder, String studentFolderPath, String fileName, String checklistItem, IncompleteStudent student) throws IOException{
+    public void copyFileAndChangeChecklist(ArrayList<IncompleteStudent> studentsList, File file, File studentFolder, String studentFolderPath, String fileName, String checklistItem, IncompleteStudent student) throws IOException{
         if (!studentFolder.exists()) {
             studentFolder.mkdir();
         }
@@ -79,6 +79,9 @@ public class Execute {
             student.setChecklist(student.getChecklist().replace(checklistItem, ""));
         else
             student.setChecklist(aux2);
+        
+        if(!studentsList.contains(student))
+            studentsList.add(student);
         System.out.println("\t\t" + studentFolderPath + fileName);
     }
 }

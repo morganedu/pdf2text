@@ -38,63 +38,33 @@ public class Main {
         final String JSONPath = "/Users/pablohpsilva/Downloads/" + JSONTYPE;
         final String PDFFolder = "/Users/pablohpsilva/Desktop/PDFFolder";
 
+        ArrayList<File> arrayPdf = new ArrayList<>();
         ArrayList<IncompleteStudent> studentsProcessed = new ArrayList<>();
         HashMap<String, File> setOfFilesFromFolder = new HashMap<>();
 
         Execute exec = new Execute();
         IncompleteStudents incompletestudents = new IncompleteStudents();
-        ArrayList<File> arrayPdf = new ArrayList<>();
-        //ArrayList<File> aux = new ArrayList<>();
         File folder = new File(PDFFolder);
 
         //Get all PDFs from a folder
         arrayPdf.addAll(Arrays.asList(folder.listFiles()));
-        //aux = (ArrayList<File>) arrayPdf.clone();
-
         try {
-            for (File file : arrayPdf) {
-                if (file.getName().contains("pdf")) {
+            for (File file : arrayPdf)
+                if (file.getName().contains("pdf"))
                     setOfFilesFromFolder.put(new Main().getPDFText(file).toString().toLowerCase().trim().replaceAll("\\s+", " "), file);
-                }
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         
+        //I don't need this array anymore.
+        arrayPdf.clear();
         System.gc();
 
         try {
-            /*
-             int count = 0;
-             for(File file : arrayPdf){
-             //Get StudentFolder
-             String[] fileNameAux = file.getPath().split("/");
-             String fileName = fileNameAux[fileNameAux.length - 1];
-             count++;
-             System.out.println("Debug purposes: " + fileName + " " + count);
-
-             //Get the PDF file and convert it to StringBuffer
-             if (!file.getName().contains("pdf")) {
-             continue;
-             }
-             //System.out.print("Hello, I got here");
-             StringBuffer str = new Main().getPDFText(file);
-
-             // Convert StringBuffer to String
-             String theString = str.toString();
-             theString = theString.toLowerCase().trim().replaceAll("\\s+", " ");
-             File output = new File(OUTPUTPATH);
-             if(!theString.equals(""))
-             exec.copyFile(file, output, file.getName());
-             }
-             */
             incompletestudents.utility();
-            studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
-            //Get all the students from JSON file
-            //incompletestudents.utility(JSONPath);
-            //studentsProcessed = (ArrayList<IncompleteStudent>) incompletestudents.getStudents().clone();
-
-            for (IncompleteStudent student : studentsProcessed) {
+            
+            int counter = 0;
+            for (IncompleteStudent student : incompletestudents.getStudents()) {
 
                 //Create Patterns based on LastName.*FirstName and FirstName.*LastName
                 Pattern patternLastFirstName = exec.getPatternNames(student.getLastName(), student.getFirstName());
@@ -102,31 +72,25 @@ public class Main {
 
                 // Create folder path
                 String studentFolderPath = OUTPUTPATH + student.getLastName() + "_" + student.getFirstName() + "_";
-                if (!student.getId().equals("")) {
+                
+                if (!student.getId().equals(""))
                     studentFolderPath += student.getId() + "_ATO/";
-                } else {
+                else
                     studentFolderPath += "_ATO/";
-                }
 
                 File studentFolder = new File(studentFolderPath);
-                /*
-                 if (!studentFolder.exists()) {
-                 studentFolder.mkdir();
-                 }
-                 */
-
+                
+                //Debug purposes;
+                counter ++;
+                System.out.println("Debug purposes: " + student.getLastName() + ", " + student.getFirstName() + " - " + counter);
+                
                 if (!student.getChecklist().equals("")) {
                     String checklist[] = student.getChecklist().split("::");
 
-                    int counter = 0;
                     for (String key : setOfFilesFromFolder.keySet()) {
                         File file = setOfFilesFromFolder.get(key);
                         String[] fileNameAux = file.getPath().split("/");
                         String fileName = fileNameAux[fileNameAux.length - 1];
-                        
-                        System.gc();
-                        counter++;
-                        System.out.println("Debug purposes: " + fileName + " " + counter);
 
                         Matcher matcher = patternLastFirstName.matcher(key);
                         Matcher mat = patternFirstLastName.matcher(key);
@@ -136,46 +100,48 @@ public class Main {
 
                             if (checklistItem.contains("scores") && checklistItem.contains("sat") || checklistItem.contains("act")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("scores") && (key.contains("sat") || checklistItem.contains("act")))) {
-                                    exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                    exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("recommendation") && checklistItem.contains("counselor") || checklistItem.contains("teacher")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("recommendation") && (key.contains("counselor") || key.contains("teacher")))) {
-                                    exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                    exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if ((checklistItem.contains("cert") || checklistItem.contains("certificate"))) {
                                 if (checklistItem.contains("secondary") && checklistItem.contains("school")) {
                                     if ((mat.find() || matcher.find()) && key.contains("secondary") && key.contains("school")) {
-                                        exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                        exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                     }
                                 } else if (checklistItem.contains("birth")) {
                                     if ((mat.find() || matcher.find()) && key.contains("birth")) {
-                                        exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                        exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                     }
                                 }
                             } else if (checklistItem.contains("essay") && checklistItem.contains("personal")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("essay") && key.contains("personal"))) {
-                                    exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                    exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("high") && checklistItem.contains("school") && checklistItem.contains("transcript")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("high") && key.contains("school") && key.contains("transcript"))) {
-                                    exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                    exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("official") && checklistItem.contains("exam")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("sssce") || key.contains("sce") || key.contains("waec") || key.contains("cxc") || key.contains("gde"))) {
-                                    exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                    exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("214") && checklistItem.contains("form")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("214") && key.contains("form"))) {
-                                    exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                    exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("resident") && checklistItem.contains("card")) {
                                 if ((mat.find() || matcher.find()) && key.contains("resident") && key.contains("card")) {
-                                    exec.copyFileAndChangeChecklist(file, studentFolder, studentFolderPath, fileName, checklistItem, student);
+                                    exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             }
                         }
                     }
                 }
+                
+                System.gc();
 
                 if (student.getChecklist().equals("")) {
                     student.setChecklist("COMPLETE");
