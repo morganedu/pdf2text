@@ -93,40 +93,49 @@ public class Main {
 
                             if (checklistItem.contains("scores") && checklistItem.contains("sat") || checklistItem.contains("act")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("scores") && (key.contains("sat") || checklistItem.contains("act")))) {
+                                    System.out.println("\t keywords found: scores | sat | act");
                                     exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("recommendation") && checklistItem.contains("counselor") || checklistItem.contains("teacher")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("recommendation") && (key.contains("counselor") || key.contains("teacher")))) {
+                                    System.out.println("\t keywords found: recommendation | counselor | teacher");
                                     exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if ((checklistItem.contains("cert") || checklistItem.contains("certificate"))) {
                                 if (checklistItem.contains("secondary") && checklistItem.contains("school")) {
                                     if ((mat.find() || matcher.find()) && key.contains("secondary") && key.contains("school")) {
+                                        System.out.println("\t keywords found: cert | secondary | school");
                                         exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                     }
                                 } else if (checklistItem.contains("birth")) {
                                     if ((mat.find() || matcher.find()) && key.contains("birth")) {
+                                        System.out.println("\t keywords found: cert | birth");
                                         exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                     }
                                 }
                             } else if (checklistItem.contains("essay") && checklistItem.contains("personal")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("essay") && key.contains("personal"))) {
+                                    System.out.println("\t keywords found: essay | personal");
                                     exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("high") && checklistItem.contains("school") && checklistItem.contains("transcript")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("high") && key.contains("school") && key.contains("transcript"))) {
+                                    System.out.println("\t keywords found: high | school | transcript");
                                     exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("official") && checklistItem.contains("exam")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("sssce") || key.contains("sce") || key.contains("waec") || key.contains("cxc") || key.contains("gde"))) {
+                                    System.out.println("\t keywords found: official | exam");
                                     exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("214") && checklistItem.contains("form")) {
                                 if ((mat.find() || matcher.find()) && (key.contains("214") && key.contains("form"))) {
+                                    System.out.println("\t keywords found: 214 | form");
                                     exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             } else if (checklistItem.contains("resident") && checklistItem.contains("card")) {
                                 if ((mat.find() || matcher.find()) && key.contains("resident") && key.contains("card")) {
+                                    System.out.println("\t keywords found: resident | card");
                                     exec.copyFileAndChangeChecklist(studentsProcessed, file, studentFolder, studentFolderPath, fileName, checklistItem, student);
                                 }
                             }
