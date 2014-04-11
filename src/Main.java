@@ -38,7 +38,6 @@ public class Main {
         final String JSONPath = "/Users/pablohpsilva/Downloads/" + JSONTYPE;
         final String PDFFolder = "/Users/pablohpsilva/Desktop/PDFFolder";
 
-        ArrayList<File> arrayPdf = new ArrayList<>();
         ArrayList<IncompleteStudent> studentsProcessed = new ArrayList<>();
         HashMap<String, File> setOfFilesFromFolder = new HashMap<>();
 
@@ -46,19 +45,13 @@ public class Main {
         IncompleteStudents incompletestudents = new IncompleteStudents();
         File folder = new File(PDFFolder);
 
-        //Get all PDFs from a folder
-        arrayPdf.addAll(Arrays.asList(folder.listFiles()));
         try {
-            for (File file : arrayPdf)
+            for (File file : Arrays.asList(folder.listFiles()))
                 if (file.getName().contains("pdf"))
                     setOfFilesFromFolder.put(new Main().getPDFText(file).toString().toLowerCase().trim().replaceAll("\\s+", " "), file);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        //I don't need this array anymore.
-        arrayPdf.clear();
-        System.gc();
 
         try {
             incompletestudents.utility();
@@ -140,8 +133,6 @@ public class Main {
                         }
                     }
                 }
-                
-                System.gc();
 
                 if (student.getChecklist().equals("")) {
                     student.setChecklist("COMPLETE");
